@@ -10,5 +10,4 @@ void displayWelcomeMsg(){
 void rep(){
     char buffer[BUFFER_SIZE];
 
-    read(STDIN_FILENO)
 }
