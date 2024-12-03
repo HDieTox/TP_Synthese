@@ -8,10 +8,7 @@ int main(int argc, char const *argv[])
     displayWelcomeMsg();
     while (1)
     {
-        /* 
-        gestion du prompt
-        affichage du retour de la fonction 
-        */
+        rep();
     }
     
     return EXIT_SUCCESS;

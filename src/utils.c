@@ -12,10 +12,31 @@
 #include "../bin/constants.h"
 
 void displayWelcomeMsg(){
-    write(STDOUT_FILENO,MESSAGE,strlen(MESSAGE)) ;
+    write(STDOUT_FILENO,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE)) ;
 }
 
+
 void rep(){
-    char buffer[BUFFER_SIZE];
+    char buffer [BUFFER_SIZE] ={0};
+
+    write(STDOUT_FILENO,PROMPT,strlen(PROMPT));
+    read(STDIN_FILENO,buffer,BUFFER_SIZE);
+
+    buffer[strlen(buffer)-1] = '\0';    
+
+    if (strlen(buffer) <= 0){
+        perror("Buffer length = 0\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    pid_t ret = fork();
+
+    if(ret == 0){
+        perror("j'ai fait un truc je crois");
+        execl(buffer,"",NULL);
+    }
+    
+
+
 
 }
