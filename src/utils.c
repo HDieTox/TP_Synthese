@@ -18,7 +18,7 @@ void displayWelcomeMsg(){
 
 void rep(){
     char buffer [BUFFER_SIZE] ={0};
-
+    
     write(STDOUT_FILENO,PROMPT,strlen(PROMPT));
     read(STDIN_FILENO,buffer,BUFFER_SIZE);
 
@@ -32,11 +32,8 @@ void rep(){
     pid_t ret = fork();
 
     if(ret == 0){
-        perror("j'ai fait un truc je crois");
-        execl(buffer,"",NULL);
+        execvp(buffer,NULL);
     }
     
-
-
 
 }
