@@ -18,12 +18,22 @@ void displayWelcomeMsg(){
 
 void rep(){
     char buffer [BUFFER_SIZE] ={0};
+    const char* separator = " ";
+    char** commande;
     
     write(STDOUT_FILENO,PROMPT,strlen(PROMPT));
     read(STDIN_FILENO,buffer,BUFFER_SIZE);
 
-    buffer[strlen(buffer)-1] = '\0';    
+    buffer[strlen(buffer)-1] = '\0';
 
+    char* strToken = strtok(buffer,separator);
+    int i = 0;
+    do{
+        commande[i] = strToken;
+        strtok(buffer,separator);
+        i++;
+    } while (strToken != NULL);
+    
     if (strlen(buffer) <= 0){
         perror("Buffer length = 0\n");
         exit(EXIT_FAILURE);
@@ -32,7 +42,7 @@ void rep(){
     pid_t ret = fork();
 
     if(ret == 0){
-        execvp(buffer,NULL);
+        execvp(commande,NULL);
     }
     
 
