@@ -13,6 +13,9 @@
 
 #include <unistd.h>
 #include "../headers/constants.h"
+
+enum redirection { SRC,DEST,ABS};
+
 void displayWelcomeMsg(){
     write(STDOUT_FILENO,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE)) ;
 }
@@ -46,12 +49,44 @@ void rep(){
     char buffer [BUFFER_SIZE*2] ={0};
     char* buffer_splited[2] ={0};
 
+// =============== DEBUT REDIRECTION ===============
+
+    enum redirection mode = SRC;
+
     slicer(buffer_splited,buffer,'<');
     if (buffer_splited[1] == NULL){
         slicer(buffer_splited,buffer,'>');
+        mode = DEST;
     }
+    if (buffer_splited[1] == NULL){
+        mode = ABS;
+    }
+
+    int input, output;
     
-    read(STDIN_FILENO,buffer,BUFFER_SIZE);
+    switch (mode){
+    case ABS:
+        input = STDIN_FILENO;
+        output = STDOUT_FILENO;
+        break;
+
+    case SRC:
+        input = open(buffer_splited[1],O_RDWR);
+        output = STDOUT_FILENO;
+        break;
+
+    case DEST:
+        input = STDIN_FILENO;
+        output = open(buffer_splited[1],O_RDWR);
+        break;
+
+    default:
+        break;
+    }
+
+// ================================================= 
+
+    read(input,buffer,BUFFER_SIZE);
 
     buffer[strlen(buffer)-1] = '\0';
 
@@ -59,7 +94,7 @@ void rep(){
     slicer(commande,buffer,' ');
     
     if(strcmp("exit",commande[0]) == 0){
-        write(STDOUT_FILENO,GOODBYE,strlen(GOODBYE));
+        write(output,GOODBYE,strlen(GOODBYE));
         exit(EXIT_SUCCESS);
     }
 
@@ -69,9 +104,6 @@ void rep(){
 
     struct timespec start, end;
     int duree = 0;
-
-    char buffer_left[BUFFER_SIZE];
-    char buffer_right[BUFFER_SIZE];
 
     clock_gettime(CLOCK_MONOTONIC,&start);
     if (ret == 0){
