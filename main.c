@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "bin/utils.h"
+#include "headers/utils.h"
 
 int main(int argc, char const *argv[])
 {
